@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Facebook – entre ou cadastre-se</title>
+    <style>
+        /* CSS RESET E PADRÕES */
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: Helvetica, Arial, sans-serif; }
+
+        body {
+            background-color: #f0f2f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            display: flex;
+            width: 980px;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* LADO ESQUERDO: TEXTO E O NOVO LOGO EM CSS */
+        .brand-section { width: 500px; padding-bottom: 100px; }
+
+        /* --- NOVO LOGO FACEBOOK EM CSS --- */
+        .facebook-logo-css {
+            font-size: 60px;
+            font-weight: bold;
+            color: #1877f2; /* Azul Oficial */
+            letter-spacing: -3px;
+            margin-bottom: 15px;
+            display: inline-block;
+        }
+        /* --------------------------------- */
+
+        .brand-section h2 { 
+            font-size: 28px; 
+            font-weight: normal; 
+            line-height: 32px; 
+            color: #1c1e21; 
+            margin-top: -10px;
+        }
+
+        /* LADO DIREITO: FORMULÁRIO */
+        .login-box {
+            width: 396px;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1), 0 8px 16px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        input {
+            width: 100%;
+            height: 52px;
+            padding: 14px;
+            margin-bottom: 12px;
+            border: 1px solid #dddfe2;
+            border-radius: 6px;
+            font-size: 17px;
+            transition: border 0.2s;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #1877f2;
+            box-shadow: 0 0 0 2px #e7f3ff;
+        }
+
+        input.error { border: 1px solid #f02849; }
+
+        .btn-login {
+            width: 100%;
+            height: 48px;
+            background-color: #1877f2;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 20px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-bottom: 15px;
+        }
+
+        .btn-login:hover { background-color: #166fe5; }
+        .btn-login:disabled { background-color: #8dbbf8; cursor: not-allowed; }
+
+        .forgot-password { display: block; color: #1877f2; text-decoration: none; font-size: 14px; margin-bottom: 20px; }
+        .forgot-password:hover { text-decoration: underline; }
+
+        hr { border: none; border-top: 1px solid #dadde1; margin-bottom: 20px; }
+        
+        .btn-new-account { 
+            background-color: #42b72a; 
+            color: white; 
+            border: none; 
+            border-radius: 6px; 
+            font-size: 17px; 
+            font-weight: bold; 
+            padding: 0 16px; 
+            height: 48px;
+            cursor: pointer; 
+            text-decoration: none; 
+            display: inline-block;
+            line-height: 48px; /* Centraliza o texto verticalmente */
+        }
+        .btn-new-account:hover { background-color: #36a420; }
+
+        /* Animação de Shake */
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+        .shake { animation: shake 0.2s ease-in-out 0s 2; }
+
+        /* RESPONSIVIDADE PARA MOBILE */
+        @media (max-width: 900px) {
+            .container { flex-direction: column; width: 100%; padding: 20px; margin-top: 20px;}
+            .brand-section { width: 100%; text-align: center; padding-bottom: 40px; }
+            .facebook-logo-css { font-size: 50px; }
+            .brand-section h2 { font-size: 23px; width: 90%; margin: 0 auto; }
+            .login-box { width: 100%; max-width: 440px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="brand-section">
+            <span class="facebook-logo-css">facebook</span>
+            <h2>O Facebook ajuda você a se conectar e compartilhar com as pessoas que fazem parte da sua vida.</h2>
+        </div>
+
+        <div class="login-box" id="loginCard">
+            <form id="loginForm">
+                <input type="text" id="email" placeholder="Email ou telefone">
+                <input type="password" id="password" placeholder="Senha">
+                <button type="submit" class="btn-login" id="loginBtn">Entrar</button>
+            </form>
+            <a href="#" class="forgot-password">Esqueceu a senha?</a>
+            <hr>
+            <a href="#" class="btn-new-account">Criar nova conta</a>
+        </div>
+    </div>
+
+    <script>
+        const loginForm = document.getElementById('loginForm');
+        const emailInput = document.getElementById('email');
+        const passInput = document.getElementById('password');
+        const loginBtn = document.getElementById('loginBtn');
+        const loginCard = document.getElementById('loginCard');
+
+        loginForm.addEventListener('submit', (e) => {
+            e.preventDefault(); // Impede o recarregamento da página
+
+            let hasError = false;
+
+            // Validação simples
+            [emailInput, passInput].forEach(input => {
+                if (input.value.trim() === "") {
+                    input.classList.add('error');
+                    hasError = true;
+                } else {
+                    input.classList.remove('error');
+                }
+            });
+
+            if (hasError) {
+                // Efeito de balançar o card se houver erro
+                loginCard.classList.add('shake');
+                setTimeout(() => loginCard.classList.remove('shake'), 400);
+                return;
+            }
+
+            // Simulação de Loading
+            loginBtn.innerText = "Entrando...";
+            loginBtn.disabled = true;
+
+            setTimeout(() => {
+                alert("Simulação: Dados enviados!\nLogin: " + emailInput.value);
+                loginBtn.innerText = "Entrar";
+                loginBtn.disabled = false;
+            }, 1500);
+        });
+
+        // Remove o erro ao começar a digitar
+        [emailInput, passInput].forEach(input => {
+            input.addEventListener('input', () => {
+                if (input.value.length > 0) input.classList.remove('error');
+            });
+        });
+    </script>
+
+</body>
+</html>
